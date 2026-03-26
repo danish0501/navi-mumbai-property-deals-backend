@@ -3,9 +3,7 @@
 const { pool } = require('../config/db');
 
 const Blog = {
-  /**
-   * Create a blog post.
-   */
+  /**  Create a blog post **/
   async create(conn, blogData) {
     const {
       slug, title, excerpt, content, category, cover_image_url, cover_image_pub_id,
@@ -22,9 +20,7 @@ const Blog = {
     return result.insertId;
   },
 
-  /**
-   * Find a blog by slug or ID.
-   */
+  /** Find a blog by slug or ID **/
   async findOne(filter) {
     const key = filter.slug ? 'slug' : 'id';
     const val = filter.slug || filter.id;
@@ -32,9 +28,7 @@ const Blog = {
     return rows.length > 0 ? rows[0] : null;
   },
 
-  /**
-   * Search and List blogs.
-   */
+  /** Search and List blogs **/
   async findAll({ where, params, limit, offset }) {
     const [blogs] = await pool.query(
       `SELECT * FROM blogs b ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
@@ -44,9 +38,7 @@ const Blog = {
     return { blogs, total };
   },
 
-  /**
-   * Update blog post.
-   */
+  /** Update blog post **/
   async update(conn, id, updateMap) {
     const fields = [];
     const params = [];
@@ -61,9 +53,7 @@ const Blog = {
     await conn.query(`UPDATE blogs SET ${fields.join(', ')} WHERE id = ?`, params);
   },
 
-  /**
-   * Tags
-   */
+  /** Tags **/
   async getTags(blogId) {
     const [rows] = await pool.query('SELECT tag FROM blog_tags WHERE blog_id = ?', [blogId]);
     return rows.map(r => r.tag);

@@ -3,9 +3,7 @@
 const { pool } = require('../config/db');
 
 const Contact = {
-  /**
-   * Submit new inquiry.
-   */
+  /** Submit new inquiry **/
   async createInquiry(data) {
     const { name, email, phone, enquiry_type, message } = data;
     const [result] = await pool.query(
@@ -15,9 +13,7 @@ const Contact = {
     return result.insertId;
   },
 
-  /**
-   * List inquiries.
-   */
+  /** List inquiries **/
   async findInquiries({ where, params, limit, offset }) {
     const [inquiries] = await pool.query(
       `SELECT * FROM contact_inquiries ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
@@ -27,9 +23,7 @@ const Contact = {
     return { inquiries, total };
   },
 
-  /**
-   * Newsletter subscribe/check.
-   */
+  /** Newsletter subscribe/check **/
   async findSubscriber(email) {
     const [rows] = await pool.query('SELECT * FROM newsletter_subscribers WHERE email = ? LIMIT 1', [email]);
     return rows.length > 0 ? rows[0] : null;

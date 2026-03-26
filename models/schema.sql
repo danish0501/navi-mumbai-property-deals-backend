@@ -1,6 +1,5 @@
 -- ══════════════════════════════════════════════════════════════════════════════
 -- Navi Mumbai Property Deals — Full Database Schema
--- Run this file once against your MySQL database.
 -- ══════════════════════════════════════════════════════════════════════════════
 
 CREATE DATABASE IF NOT EXISTS `navi_mumbai_property_deals`

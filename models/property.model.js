@@ -3,9 +3,7 @@
 const { pool } = require('../config/db');
 
 const Property = {
-  /**
-   * Create a property listing (transaction handled in controller).
-   */
+  /** Create a property listing (transaction handled in controller) **/
   async create(conn, propertyData) {
     const {
       slug, title, purpose, property_type, configuration, config_details, posted_by, user_id,
@@ -34,9 +32,7 @@ const Property = {
     return result.insertId;
   },
 
-  /**
-   * Find a property by Slug or ID.
-   */
+  /** Find a property by Slug or ID **/
   async findOne(filter) {
     const key = filter.slug ? 'slug' : 'id';
     const val = filter.slug || filter.id;
@@ -44,9 +40,7 @@ const Property = {
     return rows.length > 0 ? rows[0] : null;
   },
 
-  /**
-   * Paginated listing with dynamic filters.
-   */
+  /** Paginated listing with dynamic filters **/
   async findAll({ where, params, sort, order, limit, offset }) {
     const [properties] = await pool.query(
       `SELECT p.*, 
@@ -66,9 +60,7 @@ const Property = {
     return { properties, total };
   },
 
-  /**
-   * Update property (transaction handled in controller).
-   */
+  /** Update property (transaction handled in controller) **/
   async update(conn, id, updateMap) {
     const fields = [];
     const params = [];
@@ -83,16 +75,12 @@ const Property = {
     await conn.query(`UPDATE properties SET ${fields.join(', ')} WHERE id = ?`, params);
   },
 
-  /**
-   * Delete property records.
-   */
+  /** Delete property records **/
   async delete(id) {
     await pool.query('DELETE FROM properties WHERE id = ?', [id]);
   },
 
-  /**
-   * Relations (Images, Amenities, etc)
-   */
+  /** Relations (Images, Amenities, etc) **/
   async addImages(conn, rows) {
     await conn.query(
       'INSERT INTO property_images (property_id, url, public_id, is_cover, sort_order) VALUES ?',
