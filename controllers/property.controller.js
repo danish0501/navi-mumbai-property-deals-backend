@@ -162,4 +162,16 @@ const setCoverImage = async (req, res) => {
   }
 };
 
-module.exports = { createProperty, getProperties, getPropertyBySlug, getPropertyById, updateProperty, deleteProperty, setCoverImage };
+const deletePropertyImage = async (req, res) => {
+  try {
+    const { propertyId, imageId } = req.params;
+    const [rows] = await pool.query('SELECT public_id FROM property_images WHERE id=? AND property_id=?', [imageId, propertyId]);
+    if (rows.length) await deleteFromCloudinary(rows[0].public_id);
+    await pool.query('DELETE FROM property_images WHERE id=?', [imageId]);
+    return res.status(200).json({ success: true, message: 'Image deleted.' });
+  } catch (error) {
+    return res.status(500).json({ success: false });
+  }
+};
+
+module.exports = { createProperty, getProperties, getPropertyBySlug, getPropertyById, updateProperty, deleteProperty, setCoverImage, deletePropertyImage };
