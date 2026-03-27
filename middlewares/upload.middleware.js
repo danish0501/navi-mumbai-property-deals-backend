@@ -36,7 +36,12 @@ const uploadToCloudinary = (buffer, folder, opts = {}) => {
       {
         folder,
         resource_type: 'image',
-        transformation: [{ quality: 'auto', fetch_format: 'auto' }],
+        // ✨ MAGIC LINE: Automatic Optimization & Resizing
+        transformation: [
+          { width: 1200, crop: "limit" }, // Resize if too large
+          { quality: "auto" },           // Best balance of quality/size
+          { fetch_format: "auto" }        // WebP/AVIF auto-format
+        ],
         ...opts,
       },
       (error, result) => {
